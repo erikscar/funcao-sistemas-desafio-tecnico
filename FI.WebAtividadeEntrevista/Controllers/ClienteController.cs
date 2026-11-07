@@ -74,9 +74,11 @@ namespace WebAtividadeEntrevista.Controllers
 
             var cpf = Regex.Replace(model.CPF, @"\D", "");
 
+            var client = bo.Consultar(model.Id);
+
             var userAlreadyExists = bo.VerificarExistencia(cpf);
 
-            if (userAlreadyExists)
+            if (userAlreadyExists && model.Id != client.Id)
             {
                 this.ModelState.AddModelError("CPF", "CPF já cadastrado");
             }
