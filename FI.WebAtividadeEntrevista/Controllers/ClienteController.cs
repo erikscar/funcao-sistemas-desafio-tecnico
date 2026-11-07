@@ -43,6 +43,7 @@ namespace WebAtividadeEntrevista.Controllers
                 {                    
                     CEP = model.CEP,
                     Cidade = model.Cidade,
+                    CPF = model.CPF,
                     Email = model.Email,
                     Estado = model.Estado,
                     Logradouro = model.Logradouro,
