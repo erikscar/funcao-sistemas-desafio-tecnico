@@ -1,0 +1,43 @@
+<div class="modal fade" id="beneficiary-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Beneficiários</h4>
+            </div>
+            <form id="beneficiaryForm" method="post">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="BeneficientCPF">CPF:</label>
+                                <input required="required" type="text" class="form-control" id="BeneficientCPF" name="BeneficientCPF" placeholder="Ex.: 010.011.111-00" maxlength="50">
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label for="BeneficientName">Nome:</label>
+                                <input required="required" type="text" class="form-control" id="BeneficientName" name="BeneficientName" placeholder="Ex.: Maria" maxlength="50">
+                            </div>
+                        </div>
+                        <div class="col-md-3" style="padding-top: 25px">
+                            <button type="button" class="btn btn-success" id="addBeneficiary-btn">Incluir</button>
+                        </div>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="col-md-3">CPF</th>
+                                <th scope="col" class="col-md-5">Nome</th>
+                                <th scope="col" class="col-md-4">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="beneficiariesTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

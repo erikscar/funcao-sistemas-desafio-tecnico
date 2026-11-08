@@ -1,5 +1,7 @@
 ﻿
 $(document).ready(function () {
+    let beneficiariesList = []; 
+    let editBeneficiaryIndex = null;
     $('#formCadastro').submit(function (e) {
         e.preventDefault();
         $.ajax({
@@ -30,7 +32,30 @@ $(document).ready(function () {
             }
         });
     })
-    
+
+    $("#beneficiary-btn").on("click", function () {
+        $("#beneficiary-modal").modal("show");
+    })
+
+    $("#addBeneficiary-btn").on("click", function () {
+        const form = $("#beneficiaryForm")[0];
+        if (!form.reportValidity()) return;
+        var beneficiary = {
+            Nome: $("#BeneficientName").val(),
+            CPF: $("#BeneficientCPF").val()
+        }
+
+        if (editBeneficiaryIndex === null) {
+            beneficiariesList.push(beneficiary);
+        } else {
+            beneficiariesList[editBeneficiaryIndex] = beneficiary;
+        }
+
+        editingIndex = null;
+        $("#addBeneficiary-btn").text("Incluir");
+        
+        form.reset();
+        renderBeneficiaries();
 })
 
 function ModalDialog(titulo, texto) {
@@ -56,3 +81,41 @@ function ModalDialog(titulo, texto) {
     $('body').append(texto);
     $('#' + random).modal('show');
 }
+
+function renderBeneficiaries() {
+    const tbody = $("#beneficiariesTableBody");
+    tbody.empty();
+
+    beneficiariesList.forEach(function (beneficiary, index) {
+        const row = $("<tr>");
+
+        $("<td>").text(beneficiary.CPF).appendTo(row);
+        $("<td>").text(beneficiary.Nome).appendTo(row);
+
+        const actions = $("<td>");
+        $("<button>", {
+            type: "button",
+            class: "btn btn-primary",
+            text: "Alterar"
+        }).on("click", function () {
+            editBeneficiaryIndex = index;
+            $("#BeneficientName").val(beneficiary.Nome);
+            $("#BeneficientCPF").val(beneficiary.CPF);
+            $("#addBeneficiary-btn").text("Salvar alteração");
+
+            renderBeneficiaries();
+        }).appendTo(actions);
+
+        $("<button>", {
+            type: "button",
+            class: "btn btn-primary",
+            text: "Excluir"
+        }).on("click", function () {
+            beneficiariesList.splice(index, 1);
+            renderBeneficiaries();
+        }).appendTo(actions);
+
+        row.append(actions);
+        tbody.append(row);
+    });
+}})
