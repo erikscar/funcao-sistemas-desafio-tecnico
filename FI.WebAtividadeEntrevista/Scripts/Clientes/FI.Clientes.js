@@ -104,7 +104,11 @@ $(document).ready(function () {
                 text: "Excluir",
             }).on("click", function () {
                 beneficiariesList.splice(index, 1);
+                editBeneficiaryIndex = null;
+                $("#beneficiaryForm")[0].reset();
+                $("#addBeneficiary-btn").text("Incluir");
                 renderBeneficiaries();
+
             }).appendTo(actions);
 
             row.append(actions);
