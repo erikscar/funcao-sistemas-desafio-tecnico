@@ -63,7 +63,7 @@ namespace WebAtividadeEntrevista.Controllers
                         if (cpfs.Contains(beneficiaryCpf))
                         {
                             Response.StatusCode = 400;
-                            return Json("Existe um ou mais CPFs repetido na lista de beneficiários");
+                            return Json("Há CPFs repetidos na lista de beneficiários. Cada CPF deve aparecer apenas uma vez.");
                         }
 
                         cpfs.Add(beneficiaryCpf);
@@ -139,7 +139,7 @@ namespace WebAtividadeEntrevista.Controllers
                         if (cpfs.Contains(beneficiaryCpf))
                         {
                             Response.StatusCode = 400;
-                            return Json("Existe um ou mais CPFs repetido na lista de beneficiários");
+                            return Json("Há CPFs repetidos na lista de beneficiários. Cada CPF deve aparecer apenas uma vez.");
                         }
 
                         cpfs.Add(beneficiaryCpf);
