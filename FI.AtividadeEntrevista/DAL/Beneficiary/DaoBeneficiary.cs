@@ -73,5 +73,20 @@ namespace FI.AtividadeEntrevista.DAL
 
             return list;
         }
+
+        /// <summary>
+        /// Altera um beneficiário
+        /// </summary>
+        /// <param name="beneficiary">Objeto de beneficiário</param>
+        internal void Alterar(DML.Beneficiary beneficiary)
+        {
+            List<System.Data.SqlClient.SqlParameter> parametros = new List<System.Data.SqlClient.SqlParameter>();
+
+            parametros.Add(new System.Data.SqlClient.SqlParameter("Nome", beneficiary.Nome));
+            parametros.Add(new System.Data.SqlClient.SqlParameter("CPF", beneficiary.CPF));
+            parametros.Add(new System.Data.SqlClient.SqlParameter("ID", beneficiary.Id));
+
+            base.Executar("FI_SP_AltBeneficiary", parametros);
+        }
     }
 }

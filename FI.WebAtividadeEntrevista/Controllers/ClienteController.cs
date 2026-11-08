@@ -102,13 +102,14 @@ namespace WebAtividadeEntrevista.Controllers
         [HttpPost]
         public JsonResult Alterar(ClienteModel model)
         {
-            BoCliente bo = new BoCliente();
+            BoCliente boClient = new BoCliente();
+            BoBeneficiary boBeneficiary = new BoBeneficiary();
 
             var cpf = Regex.Replace(model.CPF, @"\D", "");
 
-            var client = bo.Consultar(model.Id);
+            var client = boClient.Consultar(model.Id);
 
-            var userAlreadyExists = bo.VerificarExistencia(cpf);
+            var userAlreadyExists = boClient.VerificarExistencia(cpf);
 
             if (userAlreadyExists && model.Id != client.Id)
             {
@@ -126,7 +127,25 @@ namespace WebAtividadeEntrevista.Controllers
             }
             else
             {
-                bo.Alterar(new Cliente()
+                if (model.Beneficiarios != null)
+                {
+                    var cpfs = new List<string>();
+
+                    foreach (var beneficiary in model.Beneficiarios)
+                    {
+                        string beneficiaryCpf = Regex.Replace(beneficiary.CPF, @"\D", "");
+
+                        if (cpfs.Contains(beneficiaryCpf))
+                        {
+                            Response.StatusCode = 400;
+                            return Json("Existe um ou mais CPFs repetido na lista de beneficiários");
+                        }
+
+                        cpfs.Add(beneficiaryCpf);
+                    }
+                }
+
+                boClient.Alterar(new Cliente()
                 {
                     Id = model.Id,
                     CEP = model.CEP,
@@ -140,6 +159,33 @@ namespace WebAtividadeEntrevista.Controllers
                     Sobrenome = model.Sobrenome,
                     Telefone = model.Telefone
                 });
+
+                if(model.Beneficiarios != null)
+                {
+                    foreach (var beneficiary in model.Beneficiarios)
+                    {
+                        //Se ID > 0 Significa que é um beneficiário já existente, logo apenas atualizar
+                        if(beneficiary.Id > 0)
+                        {
+                            boBeneficiary.Alterar(new Beneficiary()
+                            {
+                                Id = beneficiary.Id,
+                                Nome = beneficiary.Name,
+                                CPF = Regex.Replace(beneficiary.CPF, @"\D", ""),
+                            });
+                        }
+                        //Se ID == 0 Significa que é um beneficiário que não existente, logo incluir
+                        else
+                        {
+                            boBeneficiary.Incluir(new Beneficiary
+                            {
+                                CPF = Regex.Replace(beneficiary.CPF, @"\D", ""),
+                                Nome = beneficiary.Name,
+                                IdCliente = model.Id
+                            });
+                        }
+                    }
+                }
 
                 return Json("Cadastro alterado com sucesso");
             }

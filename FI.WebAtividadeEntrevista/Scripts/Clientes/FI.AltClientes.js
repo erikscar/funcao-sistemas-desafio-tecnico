@@ -37,7 +37,8 @@ $(document).ready(function () {
                 "Estado": $(this).find("#Estado").val(),
                 "Cidade": $(this).find("#Cidade").val(),
                 "Logradouro": $(this).find("#Logradouro").val(),
-                "Telefone": $(this).find("#Telefone").val()
+                "Telefone": $(this).find("#Telefone").val(),
+                "Beneficiarios": beneficiariesList
             },
             error:
             function (r) {
@@ -73,6 +74,8 @@ $(document).ready(function () {
         if (!form.reportValidity()) return;
 
         var beneficiary = {
+            //Utilizar o id Real do beneficiário
+            Id: editBeneficiaryIndex !== null ? beneficiariesList[editBeneficiaryIndex].Id : 0,
             Name: $("#BeneficientName").val(),
             CPF: $("#BeneficientCPF").val()
         }
@@ -97,7 +100,7 @@ $(document).ready(function () {
         beneficiariesList.forEach(function (beneficiary, index) {
             const row = $("<tr>");
 
-            $("<td>").text(beneficiary.CPF).appendTo(row);
+            $("<td>").text(formatCpf(beneficiary.CPF)).appendTo(row);
             $("<td>").text(beneficiary.Name).appendTo(row);
 
             const actions = $("<td>");
@@ -108,7 +111,7 @@ $(document).ready(function () {
             }).on("click", function () {
                 editBeneficiaryIndex = index;
                 $("#BeneficientName").val(beneficiary.Name);
-                $("#BeneficientCPF").val(beneficiary.CPF);
+                $("#BeneficientCPF").val(formatCpf(beneficiary.CPF));
                 $("#addBeneficiary-btn").text("Salvar alteração");
 
                 renderBeneficiaries();

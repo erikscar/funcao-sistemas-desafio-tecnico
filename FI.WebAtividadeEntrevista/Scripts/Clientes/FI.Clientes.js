@@ -80,7 +80,7 @@ $(document).ready(function () {
         beneficiariesList.forEach(function (beneficiary, index) {
             const row = $("<tr>");
 
-            $("<td>").text(beneficiary.CPF).appendTo(row);
+            $("<td>").text(formatCpf(beneficiary.CPF)).appendTo(row);
             $("<td>").text(beneficiary.Name).appendTo(row);
 
             const actions = $("<td>");
@@ -91,7 +91,7 @@ $(document).ready(function () {
             }).on("click", function () {
                 editBeneficiaryIndex = index;
                 $("#BeneficientName").val(beneficiary.Name);
-                $("#BeneficientCPF").val(beneficiary.CPF);
+                $("#BeneficientCPF").val(formatCpf(beneficiary.CPF));
                 $("#addBeneficiary-btn").text("Salvar alteração");
 
                 renderBeneficiaries();
