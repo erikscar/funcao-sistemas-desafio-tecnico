@@ -27,7 +27,8 @@ $(document).ready(function () {
         $.ajax({
             url: urlPost,
             method: "POST",
-            data: {
+            contentType: "application/json",
+            data: JSON.stringify({
                 "NOME": $(this).find("#Nome").val(),
                 "CEP": $(this).find("#CEP").val(),
                 "CPF": $(this).find("#CPF").val(),
@@ -39,7 +40,7 @@ $(document).ready(function () {
                 "Logradouro": $(this).find("#Logradouro").val(),
                 "Telefone": $(this).find("#Telefone").val(),
                 "Beneficiarios": beneficiariesList
-            },
+            }),
             error:
             function (r) {
                 if (r.status == 400)
@@ -108,7 +109,8 @@ $(document).ready(function () {
                 type: "button",
                 class: "btn btn-primary",
                 text: "Alterar"
-            }).on("click", function () {
+            }).css("margin-right", "8px")
+              .on("click", function () {
                 editBeneficiaryIndex = index;
                 $("#BeneficientName").val(beneficiary.Name);
                 $("#BeneficientCPF").val(formatCpf(beneficiary.CPF));

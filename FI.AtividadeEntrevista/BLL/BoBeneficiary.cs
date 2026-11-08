@@ -44,5 +44,16 @@ namespace FI.AtividadeEntrevista.BLL
             DAL.DaoBeneficiary ben = new DAL.DaoBeneficiary();
             ben.Alterar(beneficiary);
         }
+
+        /// <summary>
+        /// Exclui os beneficiários de um cliente
+        /// </summary>
+        /// <param name="clientId">ID CLIENTE do beneficiário</param>
+        /// <param name="beneficiaryId">ID do beneficiário</param>
+        public void Excluir(long clientId, long beneficiaryId)
+        {
+            DAL.DaoBeneficiary ben = new DAL.DaoBeneficiary();
+            ben.Excluir(clientId, beneficiaryId);
+        }
     }
 }

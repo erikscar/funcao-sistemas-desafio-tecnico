@@ -88,7 +88,8 @@ $(document).ready(function () {
                 type: "button",
                 class: "btn btn-primary",
                 text: "Alterar"
-            }).on("click", function () {
+            }).css("margin-right", "8px")
+                .on("click", function () {
                 editBeneficiaryIndex = index;
                 $("#BeneficientName").val(beneficiary.Name);
                 $("#BeneficientCPF").val(formatCpf(beneficiary.CPF));

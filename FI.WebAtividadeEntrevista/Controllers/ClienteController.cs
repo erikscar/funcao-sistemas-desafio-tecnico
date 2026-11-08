@@ -145,6 +145,20 @@ namespace WebAtividadeEntrevista.Controllers
                     }
                 }
 
+                if (model.Beneficiarios == null) model.Beneficiarios = new List<BeneficiaryModel>();
+
+                var beneficiaries = boBeneficiary.Consultar(model.Id);
+
+                foreach (var beneficiary in beneficiaries)
+                {
+                    bool hasRemoved = model.Beneficiarios.Any(b => b.Id == beneficiary.Id);
+
+                    if (!hasRemoved)
+                    {
+                        boBeneficiary.Excluir(model.Id, beneficiary.Id);
+                    }
+                }
+
                 boClient.Alterar(new Cliente()
                 {
                     Id = model.Id,
