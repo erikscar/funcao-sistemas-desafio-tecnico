@@ -27,11 +27,11 @@ namespace WebAtividadeEntrevista.Controllers
         [HttpPost]
         public JsonResult Incluir(ClienteModel model)
         {
-            BoCliente bo = new BoCliente();
-
+            BoCliente boClient = new BoCliente();
+            BoBeneficiary boBeneficiary = new BoBeneficiary();
             var cpf = Regex.Replace(model.CPF, @"\D", "");
 
-            var userAlreadyExists = bo.VerificarExistencia(cpf);
+            var userAlreadyExists = boClient.VerificarExistencia(cpf);
 
             if (userAlreadyExists)
             {
@@ -49,8 +49,26 @@ namespace WebAtividadeEntrevista.Controllers
             }
             else
             {
-                model.Id = bo.Incluir(new Cliente()
-                {                    
+                if (model.Beneficiarios != null)
+                {
+                    var cpfs = new List<string>();
+
+                    foreach (var beneficiary in model.Beneficiarios)
+                    {
+                        string beneficiaryCpf = Regex.Replace(beneficiary.CPF, @"\D", "");
+
+                        if (cpfs.Contains(beneficiaryCpf))
+                        {
+                            Response.StatusCode = 400;
+                            return Json("Existe um ou mais CPFs repetido na lista de beneficiários");
+                        }
+
+                        cpfs.Add(beneficiaryCpf);
+                    }
+                }
+
+                model.Id = boClient.Incluir(new Cliente()
+                {
                     CEP = model.CEP,
                     Cidade = model.Cidade,
                     CPF = cpf,
@@ -63,8 +81,20 @@ namespace WebAtividadeEntrevista.Controllers
                     Telefone = model.Telefone
                 });
 
-           
-                return Json(new { message =  "Cadastro efetuado com sucesso", clientId = model.Id });
+                if (model.Beneficiarios != null)
+                {
+                    foreach (var beneficiary in model.Beneficiarios)
+                    {
+                        boBeneficiary.Incluir(new Beneficiary
+                        {
+                            Nome = beneficiary.Name,
+                            CPF = Regex.Replace(beneficiary.CPF, @"\D", ""),
+                            IdCliente = model.Id
+                        });
+                    }
+                }
+
+                return Json(new { message = "Cadastro efetuado com sucesso", clientId = model.Id });
             }
         }
 
@@ -109,7 +139,7 @@ namespace WebAtividadeEntrevista.Controllers
                     Sobrenome = model.Sobrenome,
                     Telefone = model.Telefone
                 });
-                               
+
                 return Json("Cadastro alterado com sucesso");
             }
         }
@@ -138,7 +168,7 @@ namespace WebAtividadeEntrevista.Controllers
                     Telefone = cliente.Telefone
                 };
 
-            
+
             }
 
             return View(model);

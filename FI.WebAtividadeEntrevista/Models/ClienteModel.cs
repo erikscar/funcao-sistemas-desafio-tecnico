@@ -1,4 +1,5 @@
-﻿using FI.WebAtividadeEntrevista.Validators;
+﻿using FI.WebAtividadeEntrevista.Models;
+using FI.WebAtividadeEntrevista.Validators;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -74,6 +75,8 @@ namespace WebAtividadeEntrevista.Models
         /// Telefone
         /// </summary>
         public string Telefone { get; set; }
+
+        public List<BeneficiaryModel> Beneficiarios { get; set; }
 
     }    
 }

@@ -26,7 +26,8 @@ $(document).ready(function () {
                 "Estado": $(this).find("#Estado").val(),
                 "Cidade": $(this).find("#Cidade").val(),
                 "Logradouro": $(this).find("#Logradouro").val(),
-                "Telefone": $(this).find("#Telefone").val()
+                "Telefone": $(this).find("#Telefone").val(),
+                "Beneficiarios": beneficiariesList
             },
             error:
                 function (r) {
@@ -36,21 +37,13 @@ $(document).ready(function () {
                         ModalDialog("Ocorreu um erro", "Ocorreu um erro interno no servidor.");
                 },
             success: function (r) {
-                ModalDialog("Sucesso!", r.message);
-
-                if (beneficiariesList.length > 0) {
-                    $.ajax({
-                        url: urlPostBeneficiary,
-                        method: "POST",
-                        contentType: "application/json",
-                        data: JSON.stringify({
-                            clientId: r.clientId,
-                            model: beneficiariesList
-                        })
-                    });
-                }
+                ModalDialog("Sucesso!", r.message)
 
                 $("#formCadastro")[0].reset();
+                $("#beneficiaryForm")[0].reset();
+
+                $("#addBeneficiary-btn").text("Incluir");
+                renderBeneficiaries();
             }
         });
     });
@@ -76,7 +69,7 @@ $(document).ready(function () {
         editBeneficiaryIndex = null;
         $("#addBeneficiary-btn").text("Incluir");
 
-        form.reset();
+        $("#beneficiaryForm")[0].reset();
         renderBeneficiaries();
     });
 
@@ -88,7 +81,7 @@ $(document).ready(function () {
             const row = $("<tr>");
 
             $("<td>").text(beneficiary.CPF).appendTo(row);
-            $("<td>").text(beneficiary.Nome).appendTo(row);
+            $("<td>").text(beneficiary.Name).appendTo(row);
 
             const actions = $("<td>");
             $("<button>", {
