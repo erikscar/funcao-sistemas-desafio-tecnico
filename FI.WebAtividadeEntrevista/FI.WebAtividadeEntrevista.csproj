@@ -308,6 +308,7 @@
     <Content Include="Scripts\jtable\themes\metro\red\jtable.min.css" />
     <Content Include="Scripts\jtable\themes\metro\red\loading.gif" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\Utils\FI.CpfFormatter.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -346,9 +347,11 @@
     <Content Include="Scripts\jtable\themes\metro\pink\jtable.less" />
     <Content Include="Scripts\jtable\themes\metro\purple\jtable.less" />
     <Content Include="Scripts\jtable\themes\metro\red\jtable.less" />
+    <Content Include="Views\Cliente\_BenefeciariosModal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\themes\base\minified\images\" />
+    <Folder Include="Scripts\NewFolder1\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

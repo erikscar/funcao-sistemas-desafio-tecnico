@@ -3,7 +3,7 @@ $(document).ready(function () {
     if (obj) {
         $('#formCadastro #Nome').val(obj.Nome);
         $('#formCadastro #CEP').val(obj.CEP);
-        $('#formCadastro #CPF').val(obj.CPF.replace(/\D/g, "").replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4"));
+        $('#formCadastro #CPF').val(formatCpf(obj.CPF));
         $('#formCadastro #Email').val(obj.Email);
         $('#formCadastro #Sobrenome').val(obj.Sobrenome);
         $('#formCadastro #Nacionalidade').val(obj.Nacionalidade);
@@ -48,17 +48,12 @@ $(document).ready(function () {
     })
 
     $("#CPF").on("input", function () {
-        //Format for CPF
-        var cpf = $(this).val();
-
-        cpf = cpf.replace(/\D/g, "").slice(0, 11);
-        cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2");
-        cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2");
-        cpf = cpf.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-
-        $(this).val(cpf);
+        $(this).val(formatCpf($(this).val()));
     });
-    
+
+    $("#BeneficientCPF").on("input", function () {
+        $(this).val(formatCpf($(this).val()));
+    });
 })
 
 function ModalDialog(titulo, texto) {

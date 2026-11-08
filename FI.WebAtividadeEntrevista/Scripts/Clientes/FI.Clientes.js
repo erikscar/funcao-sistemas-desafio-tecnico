@@ -1,7 +1,16 @@
 ﻿
 $(document).ready(function () {
-    let beneficiariesList = []; 
+    let beneficiariesList = [];
     let editBeneficiaryIndex = null;
+
+    $("#CPF").on("input", function () {
+        $(this).val(formatCpf($(this).val()));
+    });
+
+    $("#BeneficientCPF").on("input", function () {
+        $(this).val(formatCpf($(this).val()));
+    })
+
     $('#formCadastro').submit(function (e) {
         e.preventDefault();
         $.ajax({
@@ -28,7 +37,7 @@ $(document).ready(function () {
                 },
             success:
                 function (r) {
-                    ModalDialog("Sucesso!", r)
+                    ModalDialog("Sucesso!", r.message)
                     $("#formCadastro")[0].reset();
                 }
         });
@@ -52,23 +61,51 @@ $(document).ready(function () {
             beneficiariesList[editBeneficiaryIndex] = beneficiary;
         }
 
-        editingIndex = null;
+        editBeneficiaryIndex = null;
         $("#addBeneficiary-btn").text("Incluir");
-        
+
         form.reset();
         renderBeneficiaries();
-    $("#CPF").on("input", function () {
-        //Format for CPF
-        var cpf = $(this).val();
-
-        cpf = cpf.replace(/\D/g, "").slice(0, 11);
-        cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2");
-        cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2");
-        cpf = cpf.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-
-        $(this).val(cpf);
     });
-})
+
+    function renderBeneficiaries() {
+        const tbody = $("#beneficiariesTableBody");
+        tbody.empty();
+
+        beneficiariesList.forEach(function (beneficiary, index) {
+            const row = $("<tr>");
+
+            $("<td>").text(beneficiary.CPF).appendTo(row);
+            $("<td>").text(beneficiary.Nome).appendTo(row);
+
+            const actions = $("<td>");
+            $("<button>", {
+                type: "button",
+                class: "btn btn-primary",
+                text: "Alterar"
+            }).on("click", function () {
+                editBeneficiaryIndex = index;
+                $("#BeneficientName").val(beneficiary.Nome);
+                $("#BeneficientCPF").val(beneficiary.CPF);
+                $("#addBeneficiary-btn").text("Salvar alteração");
+
+                renderBeneficiaries();
+            }).appendTo(actions);
+
+            $("<button>", {
+                type: "button",
+                class: "btn btn-primary",
+                text: "Excluir",
+            }).on("click", function () {
+                beneficiariesList.splice(index, 1);
+                renderBeneficiaries();
+            }).appendTo(actions);
+
+            row.append(actions);
+            tbody.append(row);
+        });
+    }
+});
 
 function ModalDialog(titulo, texto) {
     var random = Math.random().toString().replace('.', '');
@@ -93,41 +130,3 @@ function ModalDialog(titulo, texto) {
     $('body').append(texto);
     $('#' + random).modal('show');
 }
-
-function renderBeneficiaries() {
-    const tbody = $("#beneficiariesTableBody");
-    tbody.empty();
-
-    beneficiariesList.forEach(function (beneficiary, index) {
-        const row = $("<tr>");
-
-        $("<td>").text(beneficiary.CPF).appendTo(row);
-        $("<td>").text(beneficiary.Nome).appendTo(row);
-
-        const actions = $("<td>");
-        $("<button>", {
-            type: "button",
-            class: "btn btn-primary",
-            text: "Alterar"
-        }).on("click", function () {
-            editBeneficiaryIndex = index;
-            $("#BeneficientName").val(beneficiary.Nome);
-            $("#BeneficientCPF").val(beneficiary.CPF);
-            $("#addBeneficiary-btn").text("Salvar alteração");
-
-            renderBeneficiaries();
-        }).appendTo(actions);
-
-        $("<button>", {
-            type: "button",
-            class: "btn btn-primary",
-            text: "Excluir"
-        }).on("click", function () {
-            beneficiariesList.splice(index, 1);
-            renderBeneficiaries();
-        }).appendTo(actions);
-
-        row.append(actions);
-        tbody.append(row);
-    });
-}})

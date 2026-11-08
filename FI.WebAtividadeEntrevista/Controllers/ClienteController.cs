@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Services.Description;
 using WebAtividadeEntrevista.Models;
 
 namespace WebAtividadeEntrevista.Controllers
@@ -63,7 +64,7 @@ namespace WebAtividadeEntrevista.Controllers
                 });
 
            
-                return Json("Cadastro efetuado com sucesso");
+                return Json(new { message =  "Cadastro efetuado com sucesso", clientId = model.Id });
             }
         }
 
