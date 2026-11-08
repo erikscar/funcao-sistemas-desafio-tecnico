@@ -28,18 +28,6 @@ namespace FI.AtividadeEntrevista.DAL
             return ret;
         }
 
-        internal bool AlreadyExists(string CPF, long clientId)
-        {
-            List<System.Data.SqlClient.SqlParameter> parametros = new List<System.Data.SqlClient.SqlParameter>();
-
-            parametros.Add(new System.Data.SqlClient.SqlParameter("CPF", CPF));
-            parametros.Add(new System.Data.SqlClient.SqlParameter("IDCLIENTE", clientId));
-
-            DataSet ds = base.Consultar("FI_SP_VerifyBeneficiary", parametros);
-
-            return ds.Tables[0].Rows.Count > 0;
-        }
-
         /// <summary>
         /// Consulta um novo beneficiário
         /// </summary>
@@ -85,7 +73,7 @@ namespace FI.AtividadeEntrevista.DAL
             parametros.Add(new System.Data.SqlClient.SqlParameter("Nome", beneficiary.Nome));
             parametros.Add(new System.Data.SqlClient.SqlParameter("CPF", beneficiary.CPF));
             parametros.Add(new System.Data.SqlClient.SqlParameter("ID", beneficiary.Id));
-
+            parametros.Add(new System.Data.SqlClient.SqlParameter("IDCLIENTE", beneficiary.IdCliente));
             base.Executar("FI_SP_AltBeneficiary", parametros);
         }
 

@@ -30,14 +30,6 @@ namespace WebAtividadeEntrevista.Controllers
         {
             BoCliente boClient = new BoCliente();
             BoBeneficiary boBeneficiary = new BoBeneficiary();
-            var cpf = Regex.Replace(model.CPF, @"\D", "");
-
-            var userAlreadyExists = boClient.VerificarExistencia(cpf);
-
-            if (userAlreadyExists)
-            {
-                this.ModelState.AddModelError("CPF", "CPF já cadastrado");
-            }
 
             if (!this.ModelState.IsValid)
             {
@@ -50,6 +42,16 @@ namespace WebAtividadeEntrevista.Controllers
             }
             else
             {
+                var cpf = Regex.Replace(model.CPF, @"\D", "");
+
+                var userAlreadyExists = boClient.VerificarExistencia(cpf, 0);
+
+                if (userAlreadyExists)
+                {
+                    Response.StatusCode = 400;
+                    return Json("CPF já cadastrado");
+                }
+
                 if (model.Beneficiarios != null)
                 {
                     var cpfs = new List<string>();
@@ -105,17 +107,6 @@ namespace WebAtividadeEntrevista.Controllers
             BoCliente boClient = new BoCliente();
             BoBeneficiary boBeneficiary = new BoBeneficiary();
 
-            var cpf = Regex.Replace(model.CPF, @"\D", "");
-
-            var client = boClient.Consultar(model.Id);
-
-            var userAlreadyExists = boClient.VerificarExistencia(cpf);
-
-            if (userAlreadyExists && model.Id != client.Id)
-            {
-                this.ModelState.AddModelError("CPF", "CPF já cadastrado");
-            }
-
             if (!this.ModelState.IsValid)
             {
                 List<string> erros = (from item in ModelState.Values
@@ -127,6 +118,16 @@ namespace WebAtividadeEntrevista.Controllers
             }
             else
             {
+                var cpf = Regex.Replace(model.CPF, @"\D", "");
+
+                var userAlreadyExists = boClient.VerificarExistencia(cpf, model.Id);
+
+                if (userAlreadyExists)
+                {
+                    Response.StatusCode = 400;
+                    return Json("CPF já cadastrado");
+                }
+
                 if (model.Beneficiarios != null)
                 {
                     var cpfs = new List<string>();
@@ -151,9 +152,9 @@ namespace WebAtividadeEntrevista.Controllers
 
                 foreach (var beneficiary in beneficiaries)
                 {
-                    bool hasRemoved = model.Beneficiarios.Any(b => b.Id == beneficiary.Id);
+                    bool stillInList = model.Beneficiarios.Any(b => b.Id == beneficiary.Id);
 
-                    if (!hasRemoved)
+                    if (!stillInList)
                     {
                         boBeneficiary.Excluir(model.Id, beneficiary.Id);
                     }
@@ -174,18 +175,17 @@ namespace WebAtividadeEntrevista.Controllers
                     Telefone = model.Telefone
                 });
 
-                if(model.Beneficiarios != null)
-                {
                     foreach (var beneficiary in model.Beneficiarios)
                     {
                         //Se ID > 0 Significa que é um beneficiário já existente, logo apenas atualizar
-                        if(beneficiary.Id > 0)
+                        if (beneficiary.Id > 0)
                         {
                             boBeneficiary.Alterar(new Beneficiary()
                             {
                                 Id = beneficiary.Id,
                                 Nome = beneficiary.Name,
                                 CPF = Regex.Replace(beneficiary.CPF, @"\D", ""),
+                                IdCliente = model.Id
                             });
                         }
                         //Se ID == 0 Significa que é um beneficiário que não existente, logo incluir
@@ -199,8 +199,6 @@ namespace WebAtividadeEntrevista.Controllers
                             });
                         }
                     }
-                }
-
                 return Json("Cadastro alterado com sucesso");
             }
         }

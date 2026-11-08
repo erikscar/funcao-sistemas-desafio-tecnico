@@ -18,17 +18,6 @@ namespace FI.AtividadeEntrevista.BLL
             return ben.Register(beneficiary);
         }
 
-        /// <summary>
-        /// VerificaExistencia
-        /// </summary>
-        /// <param name="CPF"></param>
-        /// <returns></returns>
-        public bool AlreadyExists(string CPF, long clientId)
-        {
-            DAL.DaoBeneficiary ben = new DAL.DaoBeneficiary();
-            return ben.AlreadyExists(CPF, clientId);
-        }
-
         public List<DML.Beneficiary> Consultar(long id)
         {
             DAL.DaoBeneficiary ben = new DAL.DaoBeneficiary();
