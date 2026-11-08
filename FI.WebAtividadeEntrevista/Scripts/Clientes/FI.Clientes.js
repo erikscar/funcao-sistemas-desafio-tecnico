@@ -14,7 +14,7 @@ $(document).ready(function () {
     $('#formCadastro').submit(function (e) {
         e.preventDefault();
         $.ajax({
-            url: urlPost,
+            url: urlPostClient,
             method: "POST",
             data: {
                 "NOME": $(this).find("#Nome").val(),
@@ -35,13 +35,25 @@ $(document).ready(function () {
                     else if (r.status == 500)
                         ModalDialog("Ocorreu um erro", "Ocorreu um erro interno no servidor.");
                 },
-            success:
-                function (r) {
-                    ModalDialog("Sucesso!", r.message)
-                    $("#formCadastro")[0].reset();
+            success: function (r) {
+                ModalDialog("Sucesso!", r.message);
+
+                if (beneficiariesList.length > 0) {
+                    $.ajax({
+                        url: urlPostBeneficiary,
+                        method: "POST",
+                        contentType: "application/json",
+                        data: JSON.stringify({
+                            clientId: r.clientId,
+                            model: beneficiariesList
+                        })
+                    });
                 }
+
+                $("#formCadastro")[0].reset();
+            }
         });
-    })
+    });
 
     $("#beneficiary-btn").on("click", function () {
         $("#beneficiary-modal").modal("show");
@@ -51,7 +63,7 @@ $(document).ready(function () {
         const form = $("#beneficiaryForm")[0];
         if (!form.reportValidity()) return;
         var beneficiary = {
-            Nome: $("#BeneficientName").val(),
+            Name: $("#BeneficientName").val(),
             CPF: $("#BeneficientCPF").val()
         }
 
@@ -85,7 +97,7 @@ $(document).ready(function () {
                 text: "Alterar"
             }).on("click", function () {
                 editBeneficiaryIndex = index;
-                $("#BeneficientName").val(beneficiary.Nome);
+                $("#BeneficientName").val(beneficiary.Name);
                 $("#BeneficientCPF").val(beneficiary.CPF);
                 $("#addBeneficiary-btn").text("Salvar alteração");
 
