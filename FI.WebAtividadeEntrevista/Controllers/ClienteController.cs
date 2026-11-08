@@ -1,5 +1,6 @@
 ﻿using FI.AtividadeEntrevista.BLL;
 using FI.AtividadeEntrevista.DML;
+using FI.WebAtividadeEntrevista.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -147,8 +148,19 @@ namespace WebAtividadeEntrevista.Controllers
         [HttpGet]
         public ActionResult Alterar(long id)
         {
-            BoCliente bo = new BoCliente();
-            Cliente cliente = bo.Consultar(id);
+            BoCliente boClient = new BoCliente();
+            BoBeneficiary boBeneficiary = new BoBeneficiary();
+
+            Cliente cliente = boClient.Consultar(id);
+            List<Beneficiary> beneficiaries = boBeneficiary.Consultar(id);
+
+            List<BeneficiaryModel> beneficiaryModels = beneficiaries.Select(b => new BeneficiaryModel
+            {
+                Id = b.Id,
+                CPF = b.CPF,
+                Name = b.Nome
+            }).ToList();
+
             Models.ClienteModel model = null;
 
             if (cliente != null)
@@ -165,10 +177,9 @@ namespace WebAtividadeEntrevista.Controllers
                     Nacionalidade = cliente.Nacionalidade,
                     Nome = cliente.Nome,
                     Sobrenome = cliente.Sobrenome,
-                    Telefone = cliente.Telefone
+                    Telefone = cliente.Telefone,
+                    Beneficiarios = beneficiaryModels
                 };
-
-
             }
 
             return View(model);

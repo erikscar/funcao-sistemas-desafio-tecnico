@@ -1,5 +1,8 @@
 ﻿
 $(document).ready(function () {
+    let beneficiariesList = [];
+    let editBeneficiaryIndex = null;
+
     if (obj) {
         $('#formCadastro #Nome').val(obj.Nome);
         $('#formCadastro #CEP').val(obj.CEP);
@@ -11,6 +14,11 @@ $(document).ready(function () {
         $('#formCadastro #Cidade').val(obj.Cidade);
         $('#formCadastro #Logradouro').val(obj.Logradouro);
         $('#formCadastro #Telefone').val(obj.Telefone);
+
+        if (obj.Beneficiarios.length > 0) {
+            beneficiariesList = obj.Beneficiarios;
+            renderBeneficiaries();
+        }
     }
 
     $('#formCadastro').submit(function (e) {
@@ -54,6 +62,71 @@ $(document).ready(function () {
     $("#BeneficientCPF").on("input", function () {
         $(this).val(formatCpf($(this).val()));
     });
+
+    $("#beneficiary-btn").on("click", function () {
+        $("#beneficiary-modal").modal("show");
+    })
+
+    $("#addBeneficiary-btn").on("click", function () {
+        const form = $("#beneficiaryForm")[0];
+
+        if (!form.reportValidity()) return;
+
+        var beneficiary = {
+            Name: $("#BeneficientName").val(),
+            CPF: $("#BeneficientCPF").val()
+        }
+
+        if (editBeneficiaryIndex === null) {
+            beneficiariesList.push(beneficiary);
+        } else {
+            beneficiariesList[editBeneficiaryIndex] = beneficiary;
+        }
+
+        editBeneficiaryIndex = null;
+        $("#addBeneficiary-btn").text("Incluir");
+
+        $("#beneficiaryForm")[0].reset();
+        renderBeneficiaries();
+    });
+
+    function renderBeneficiaries() {
+        const tbody = $("#beneficiariesTableBody");
+        tbody.empty();
+
+        beneficiariesList.forEach(function (beneficiary, index) {
+            const row = $("<tr>");
+
+            $("<td>").text(beneficiary.CPF).appendTo(row);
+            $("<td>").text(beneficiary.Name).appendTo(row);
+
+            const actions = $("<td>");
+            $("<button>", {
+                type: "button",
+                class: "btn btn-primary",
+                text: "Alterar"
+            }).on("click", function () {
+                editBeneficiaryIndex = index;
+                $("#BeneficientName").val(beneficiary.Name);
+                $("#BeneficientCPF").val(beneficiary.CPF);
+                $("#addBeneficiary-btn").text("Salvar alteração");
+
+                renderBeneficiaries();
+            }).appendTo(actions);
+
+            $("<button>", {
+                type: "button",
+                class: "btn btn-primary",
+                text: "Excluir",
+            }).on("click", function () {
+                beneficiariesList.splice(index, 1);
+                renderBeneficiaries();
+            }).appendTo(actions);
+
+            row.append(actions);
+            tbody.append(row);
+        });
+    }
 })
 
 function ModalDialog(titulo, texto) {

@@ -27,5 +27,51 @@ namespace FI.AtividadeEntrevista.DAL
                 long.TryParse(ds.Tables[0].Rows[0][0].ToString(), out ret);
             return ret;
         }
+
+        internal bool AlreadyExists(string CPF, long clientId)
+        {
+            List<System.Data.SqlClient.SqlParameter> parametros = new List<System.Data.SqlClient.SqlParameter>();
+
+            parametros.Add(new System.Data.SqlClient.SqlParameter("CPF", CPF));
+            parametros.Add(new System.Data.SqlClient.SqlParameter("IDCLIENTE", clientId));
+
+            DataSet ds = base.Consultar("FI_SP_VerifyBeneficiary", parametros);
+
+            return ds.Tables[0].Rows.Count > 0;
+        }
+
+        /// <summary>
+        /// Consulta um novo beneficiário
+        /// </summary>
+        /// <param name="beneficiary">Objeto de beneficiário</param>
+        internal List<DML.Beneficiary> Consultar(long Id)
+        {
+            List<System.Data.SqlClient.SqlParameter> parametros = new List<System.Data.SqlClient.SqlParameter>();
+
+            parametros.Add(new System.Data.SqlClient.SqlParameter("IDCLIENTE", Id));
+
+            DataSet ds = base.Consultar("FI_SP_ConsBeneficiary", parametros);
+            List<DML.Beneficiary> ben = Converter(ds);
+
+            return ben;
+        }
+
+        private List<DML.Beneficiary> Converter(DataSet ds)
+        {
+            List<DML.Beneficiary> list = new List<DML.Beneficiary>();
+            if (ds != null && ds.Tables != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                foreach (DataRow row in ds.Tables[0].Rows)
+                {
+                    DML.Beneficiary ben = new DML.Beneficiary();
+                    ben.Id = row.Field<long>("Id");
+                    ben.CPF = row.Field<string>("CPF");
+                    ben.Nome = row.Field<string>("Nome");
+                    list.Add(ben);
+                }
+            }
+
+            return list;
+        }
     }
 }
