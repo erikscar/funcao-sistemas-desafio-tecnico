@@ -22,7 +22,7 @@ namespace FI.WebAtividadeEntrevista.Models
         /// CPF
         /// </summary>
         [Required]
-        [CpfValidator(ErrorMessage = "Digite um CPF válido")]
+        [CpfValidator(ErrorMessage = "Informe um CPF válido para o beneficiário.")]
         public string CPF { get; set; }
     }
 }

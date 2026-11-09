@@ -31,7 +31,7 @@ namespace WebAtividadeEntrevista.Models
         /// CPF
         /// </summary>
         [Required]
-        [CpfValidator(ErrorMessage = "Digite um CPF válido")]
+        [CpfValidator(ErrorMessage = "Informe um CPF válido para o cliente.")]
         public string CPF { get; set; }
 
         /// <summary>

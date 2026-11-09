@@ -38,7 +38,7 @@ namespace WebAtividadeEntrevista.Controllers
                                       select error.ErrorMessage).ToList();
 
                 Response.StatusCode = 400;
-                return Json(string.Join(Environment.NewLine, erros));
+                return Json(string.Join("<br/>", erros));
             }
             else
             {
@@ -49,7 +49,7 @@ namespace WebAtividadeEntrevista.Controllers
                 if (userAlreadyExists)
                 {
                     Response.StatusCode = 400;
-                    return Json("CPF já cadastrado");
+                    return Json("O CPF informado já está vinculado a outro cliente.");
                 }
 
                 if (model.Beneficiarios != null)
@@ -63,7 +63,7 @@ namespace WebAtividadeEntrevista.Controllers
                         if (cpfs.Contains(beneficiaryCpf))
                         {
                             Response.StatusCode = 400;
-                            return Json("Há CPFs repetidos na lista de beneficiários. Cada CPF deve aparecer apenas uma vez.");
+                            return Json("Informe um CPF único para cada beneficiário.");
                         }
 
                         cpfs.Add(beneficiaryCpf);
@@ -114,7 +114,7 @@ namespace WebAtividadeEntrevista.Controllers
                                       select error.ErrorMessage).ToList();
 
                 Response.StatusCode = 400;
-                return Json(string.Join(Environment.NewLine, erros));
+                return Json(string.Join("<br />", erros));
             }
             else
             {
@@ -125,7 +125,7 @@ namespace WebAtividadeEntrevista.Controllers
                 if (userAlreadyExists)
                 {
                     Response.StatusCode = 400;
-                    return Json("CPF já cadastrado");
+                    return Json("O CPF informado já está vinculado a outro cliente.");
                 }
 
                 if (model.Beneficiarios != null)
@@ -139,7 +139,7 @@ namespace WebAtividadeEntrevista.Controllers
                         if (cpfs.Contains(beneficiaryCpf))
                         {
                             Response.StatusCode = 400;
-                            return Json("Há CPFs repetidos na lista de beneficiários. Cada CPF deve aparecer apenas uma vez.");
+                            return Json("Informe um CPF único para cada beneficiário.");
                         }
 
                         cpfs.Add(beneficiaryCpf);
