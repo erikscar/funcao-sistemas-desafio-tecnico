@@ -21,7 +21,7 @@ namespace FI.AtividadeEntrevista.DAL
             parametros.Add(new System.Data.SqlClient.SqlParameter("CPF", beneficiario.CPF));
             parametros.Add(new System.Data.SqlClient.SqlParameter("IDCLIENTE", beneficiario.IdCliente));
 
-            DataSet ds = base.Consultar("FI_SP_IncBeneficiary", parametros);
+            DataSet ds = base.Consultar("FI_SP_IncBeneficiario", parametros);
             long ret = 0;
             if (ds.Tables[0].Rows.Count > 0)
                 long.TryParse(ds.Tables[0].Rows[0][0].ToString(), out ret);
@@ -38,7 +38,7 @@ namespace FI.AtividadeEntrevista.DAL
 
             parametros.Add(new System.Data.SqlClient.SqlParameter("IDCLIENTE", Id));
 
-            DataSet ds = base.Consultar("FI_SP_ConsBeneficiary", parametros);
+            DataSet ds = base.Consultar("FI_SP_ConsBeneficiario", parametros);
             List<DML.Beneficiario> ben = Converter(ds);
 
             return ben;
@@ -74,7 +74,7 @@ namespace FI.AtividadeEntrevista.DAL
             parametros.Add(new System.Data.SqlClient.SqlParameter("CPF", beneficiario.CPF));
             parametros.Add(new System.Data.SqlClient.SqlParameter("ID", beneficiario.Id));
             parametros.Add(new System.Data.SqlClient.SqlParameter("IDCLIENTE", beneficiario.IdCliente));
-            base.Executar("FI_SP_AltBeneficiary", parametros);
+            base.Executar("FI_SP_AltBeneficiario", parametros);
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace FI.AtividadeEntrevista.DAL
             parametros.Add(new System.Data.SqlClient.SqlParameter("IDCLIENTE", idCliente));
             parametros.Add(new System.Data.SqlClient.SqlParameter("ID", idBeneficiario));
 
-            base.Executar("FI_SP_DeleteBeneficiary", parametros);
+            base.Executar("FI_SP_DelBeneficiario", parametros);
         }
     }
 }
