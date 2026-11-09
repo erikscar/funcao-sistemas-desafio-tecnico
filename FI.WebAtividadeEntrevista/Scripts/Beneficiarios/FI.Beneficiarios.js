@@ -58,7 +58,7 @@ function ListarBeneficiarios() {
                 editarBeneficiarioIndice = index;
                 $("#BeneficiarioNome").val(beneficiario.Nome);
                 $("#BeneficiarioCPF").val(formatarCPF(beneficiario.CPF));
-                $("#adicionarBeneficiario-btn").text("Salvar alteração");
+                $("#adicionarBeneficiario-btn").text("Confirmar");
 
                 ListarBeneficiarios();
             }).appendTo(actions);
