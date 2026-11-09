@@ -3,7 +3,7 @@ $(document).ready(function () {
     if (obj) {
         $('#formCadastro #Nome').val(obj.Nome);
         $('#formCadastro #CEP').val(obj.CEP);
-        $('#formCadastro #CPF').val(formatCpf(obj.CPF));
+        $('#formCadastro #CPF').val(formatarCPF(obj.CPF));
         $('#formCadastro #Email').val(obj.Email);
         $('#formCadastro #Sobrenome').val(obj.Sobrenome);
         $('#formCadastro #Nacionalidade').val(obj.Nacionalidade);
@@ -12,8 +12,8 @@ $(document).ready(function () {
         $('#formCadastro #Logradouro').val(obj.Logradouro);
         $('#formCadastro #Telefone').val(obj.Telefone);
 
-        beneficiariesList = obj.Beneficiarios || [];
-        renderBeneficiaries();
+        beneficiarios = obj.Beneficiarios || [];
+        ListarBeneficiarios();
     }
 
     $('#formCadastro').submit(function (e) {
@@ -34,7 +34,7 @@ $(document).ready(function () {
                 "Cidade": $(this).find("#Cidade").val(),
                 "Logradouro": $(this).find("#Logradouro").val(),
                 "Telefone": $(this).find("#Telefone").val(),
-                "Beneficiarios": beneficiariesList
+                "Beneficiarios": beneficiarios
             }),
             error:
             function (r) {

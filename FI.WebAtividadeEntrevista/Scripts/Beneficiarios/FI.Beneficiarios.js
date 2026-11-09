@@ -1,52 +1,52 @@
-let beneficiariesList = [];
-let editBeneficiaryIndex = null;
+let beneficiarios = [];
+let editarBeneficiarioIndice = null;
 
 $(document).ready(function () {
     $("#CPF").on("input", function () {
-        $(this).val(formatCpf($(this).val()));
+        $(this).val(formatarCPF($(this).val()));
     });
 
-    $("#BeneficientCPF").on("input", function () {
-        $(this).val(formatCpf($(this).val()));
+    $("#BeneficiarioCPF").on("input", function () {
+        $(this).val(formatarCPF($(this).val()));
     })
 
-    $("#beneficiary-btn").on("click", function () {
-        $("#beneficiary-modal").modal("show");
+    $("#beneficiario-btn").on("click", function () {
+        $("#beneficiario-modal").modal("show");
     })
 
-    $("#addBeneficiary-btn").on("click", function () {
-        const form = $("#beneficiaryForm")[0];
+    $("#adicionarBeneficiario-btn").on("click", function () {
+        const form = $("#beneficiarioForm")[0];
 
         if (!form.reportValidity()) return;
-        var beneficiary = {
-            Id: editBeneficiaryIndex != null ? beneficiariesList[editBeneficiaryIndex].Id : 0,
-            Name: $("#BeneficientName").val(),
-            CPF: $("#BeneficientCPF").val()
+        var beneficiario = {
+            Id: editarBeneficiarioIndice != null ? beneficiarios[editarBeneficiarioIndice].Id : 0,
+            Nome: $("#BeneficiarioNome").val(),
+            CPF: $("#BeneficiarioCPF").val()
         }
 
-        if (editBeneficiaryIndex === null) {
-            beneficiariesList.push(beneficiary);
+        if (editarBeneficiarioIndice === null) {
+            beneficiarios.push(beneficiario);
         } else {
-            beneficiariesList[editBeneficiaryIndex] = beneficiary;
+            beneficiarios[editarBeneficiarioIndice] = beneficiario;
         }
 
-        editBeneficiaryIndex = null;
-        $("#addBeneficiary-btn").text("Incluir");
+        editarBeneficiarioIndice = null;
+        $("#adicionarBeneficiario-btn").text("Incluir");
 
-        $("#beneficiaryForm")[0].reset();
-        renderBeneficiaries();
+        $("#beneficiarioForm")[0].reset();
+        ListarBeneficiarios();
     });
 });
 
-function renderBeneficiaries() {
-    const tbody = $("#beneficiariesTableBody");
+function ListarBeneficiarios() {
+    const tbody = $("#beneficiariosTableBody");
     tbody.empty();
 
-    beneficiariesList.forEach(function (beneficiary, index) {
+    beneficiarios.forEach(function (beneficiario, index) {
         const row = $("<tr>");
 
-        $("<td>").text(formatCpf(beneficiary.CPF)).appendTo(row);
-        $("<td>").text(beneficiary.Name).appendTo(row);
+        $("<td>").text(formatarCPF(beneficiario.CPF)).appendTo(row);
+        $("<td>").text(beneficiario.Nome).appendTo(row);
 
         const actions = $("<td>");
         $("<button>", {
@@ -55,12 +55,12 @@ function renderBeneficiaries() {
             text: "Alterar"
         }).css("margin-right", "8px")
             .on("click", function () {
-                editBeneficiaryIndex = index;
-                $("#BeneficientName").val(beneficiary.Name);
-                $("#BeneficientCPF").val(formatCpf(beneficiary.CPF));
-                $("#addBeneficiary-btn").text("Salvar alteração");
+                editarBeneficiarioIndice = index;
+                $("#BeneficiarioNome").val(beneficiario.Nome);
+                $("#BeneficiarioCPF").val(formatarCPF(beneficiario.CPF));
+                $("#adicionarBeneficiario-btn").text("Salvar alteração");
 
-                renderBeneficiaries();
+                ListarBeneficiarios();
             }).appendTo(actions);
 
         $("<button>", {
@@ -68,11 +68,11 @@ function renderBeneficiaries() {
             class: "btn btn-primary",
             text: "Excluir",
         }).on("click", function () {
-            beneficiariesList.splice(index, 1);
-            editBeneficiaryIndex = null;
-            $("#beneficiaryForm")[0].reset();
-            $("#addBeneficiary-btn").text("Incluir");
-            renderBeneficiaries();
+            beneficiarios.splice(index, 1);
+            editarBeneficiarioIndice = null;
+            $("#beneficiarioForm")[0].reset();
+            $("#adicionarBeneficiario-btn").text("Incluir");
+            ListarBeneficiarios();
 
         }).appendTo(actions);
 

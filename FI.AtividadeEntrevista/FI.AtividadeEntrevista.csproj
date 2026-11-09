@@ -42,20 +42,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BLL\BoBeneficiary.cs" />
+    <Compile Include="BLL\BoBeneficiario.cs" />
     <Compile Include="BLL\BoCliente.cs" />
-    <Compile Include="DAL\Beneficiary\DaoBeneficiary.cs" />
+    <Compile Include="DAL\Beneficiario\DaoBeneficiario.cs" />
     <Compile Include="DAL\Clientes\DaoCliente.cs" />
     <Compile Include="DAL\Padrao\FI.AcessoDados.cs" />
-    <Compile Include="DML\Beneficiary.cs" />
+    <Compile Include="DML\Beneficiario.cs" />
     <Compile Include="DML\Cliente.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DAL\Beneficiary\Procedures\FI_SP_AltBeneficiary.sql" />
-    <Content Include="DAL\Beneficiary\Procedures\FI_SP_ConsBeneficiary.sql" />
-    <Content Include="DAL\Beneficiary\Procedures\FI_SP_DeleteBeneficiary.sql" />
-    <Content Include="DAL\Beneficiary\Procedures\FI_SP_IncBeneficiary.sql" />
+    <Content Include="DAL\Beneficiario\Procedures\FI_SP_AltBeneficiary.sql" />
+    <Content Include="DAL\Beneficiario\Procedures\FI_SP_ConsBeneficiary.sql" />
+    <Content Include="DAL\Beneficiario\Procedures\FI_SP_DeleteBeneficiary.sql" />
+    <Content Include="DAL\Beneficiario\Procedures\FI_SP_IncBeneficiary.sql" />
     <Content Include="DAL\Clientes\Procedures\FI_SP_AltCliente.sql" />
     <Content Include="DAL\Clientes\Procedures\FI_SP_ConsCliente.sql" />
     <Content Include="DAL\Clientes\Procedures\FI_SP_DelCliente.sql" />
