@@ -1,4 +1,4 @@
-function formatCpf(cpf) {
+function formatarCPF(cpf) {
     return (cpf || "")
         .replace(/\D/g, "")
         .slice(0, 11)

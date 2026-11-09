@@ -1,4 +1,4 @@
-CREATE PROC FI_SP_DeleteBeneficiary
+CREATE PROC FI_SP_DelBeneficiario
     @IDCLIENTE BIGINT,
 	@ID BIGINT
 AS

@@ -8,7 +8,7 @@ using System.Text;
 
 namespace FI.WebAtividadeEntrevista.Models
 {
-    public class BeneficiaryModel
+    public class BeneficiarioModel
     {
         public long Id { get; set; }
 
@@ -16,7 +16,7 @@ namespace FI.WebAtividadeEntrevista.Models
         /// Nome
         /// </summary>
         [Required]
-        public string Name { get; set; }
+        public string Nome { get; set; }
 
         /// <summary>
         /// CPF

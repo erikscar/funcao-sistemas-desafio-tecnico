@@ -3,7 +3,7 @@ $(document).ready(function () {
     $('#formCadastro').submit(function (e) {
         e.preventDefault();
         $.ajax({
-            url: urlPostClient,
+            url: urlPostCliente,
             method: "POST",
             data: {
                 "NOME": $(this).find("#Nome").val(),
@@ -16,7 +16,7 @@ $(document).ready(function () {
                 "Cidade": $(this).find("#Cidade").val(),
                 "Logradouro": $(this).find("#Logradouro").val(),
                 "Telefone": $(this).find("#Telefone").val(),
-                "Beneficiarios": beneficiariesList
+                "Beneficiarios": beneficiarios
             },
             error:
                 function (r) {
@@ -29,12 +29,12 @@ $(document).ready(function () {
                 ModalDialog("Sucesso!", r.message)
 
                 $("#formCadastro")[0].reset();
-                $("#beneficiaryForm")[0].reset();
+                $("#beneficiarioForm")[0].reset();
 
-                $("#addBeneficiary-btn").text("Incluir");
-                beneficiariesList = [];
-                editBeneficiaryIndex = null;
-                renderBeneficiaries();
+                $("#adicionarBeneficiario-btn").text("Incluir");
+                beneficiarios = [];
+                editarBeneficiarioIndice = null;
+                ListarBeneficiarios();
             }
         });
     });

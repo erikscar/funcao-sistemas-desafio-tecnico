@@ -28,8 +28,8 @@ namespace WebAtividadeEntrevista.Controllers
         [HttpPost]
         public JsonResult Incluir(ClienteModel model)
         {
-            BoCliente boClient = new BoCliente();
-            BoBeneficiary boBeneficiary = new BoBeneficiary();
+            BoCliente boCliente = new BoCliente();
+            BoBeneficiario boBeneficiario = new BoBeneficiario();
 
             if (!this.ModelState.IsValid)
             {
@@ -44,9 +44,9 @@ namespace WebAtividadeEntrevista.Controllers
             {
                 var cpf = Regex.Replace(model.CPF, @"\D", "");
 
-                var userAlreadyExists = boClient.VerificarExistencia(cpf, 0);
+                var usuarioJaExiste = boCliente.VerificarExistencia(cpf, 0);
 
-                if (userAlreadyExists)
+                if (usuarioJaExiste)
                 {
                     Response.StatusCode = 400;
                     return Json("O CPF informado já está vinculado a outro cliente.");
@@ -56,21 +56,21 @@ namespace WebAtividadeEntrevista.Controllers
                 {
                     var cpfs = new List<string>();
 
-                    foreach (var beneficiary in model.Beneficiarios)
+                    foreach (var beneficiario in model.Beneficiarios)
                     {
-                        string beneficiaryCpf = Regex.Replace(beneficiary.CPF, @"\D", "");
+                        string beneficiarioCpf = Regex.Replace(beneficiario.CPF, @"\D", "");
 
-                        if (cpfs.Contains(beneficiaryCpf))
+                        if (cpfs.Contains(beneficiarioCpf))
                         {
                             Response.StatusCode = 400;
                             return Json("Informe um CPF único para cada beneficiário.");
                         }
 
-                        cpfs.Add(beneficiaryCpf);
+                        cpfs.Add(beneficiarioCpf);
                     }
                 }
 
-                model.Id = boClient.Incluir(new Cliente()
+                model.Id = boCliente.Incluir(new Cliente()
                 {
                     CEP = model.CEP,
                     Cidade = model.Cidade,
@@ -86,12 +86,12 @@ namespace WebAtividadeEntrevista.Controllers
 
                 if (model.Beneficiarios != null)
                 {
-                    foreach (var beneficiary in model.Beneficiarios)
+                    foreach (var beneficiario in model.Beneficiarios)
                     {
-                        boBeneficiary.Incluir(new Beneficiary
+                        boBeneficiario.Incluir(new Beneficiario
                         {
-                            Nome = beneficiary.Name,
-                            CPF = Regex.Replace(beneficiary.CPF, @"\D", ""),
+                            Nome = beneficiario.Nome,
+                            CPF = Regex.Replace(beneficiario.CPF, @"\D", ""),
                             IdCliente = model.Id
                         });
                     }
@@ -104,8 +104,8 @@ namespace WebAtividadeEntrevista.Controllers
         [HttpPost]
         public JsonResult Alterar(ClienteModel model)
         {
-            BoCliente boClient = new BoCliente();
-            BoBeneficiary boBeneficiary = new BoBeneficiary();
+            BoCliente boCliente = new BoCliente();
+            BoBeneficiario boBeneficiario = new BoBeneficiario();
 
             if (!this.ModelState.IsValid)
             {
@@ -120,9 +120,9 @@ namespace WebAtividadeEntrevista.Controllers
             {
                 var cpf = Regex.Replace(model.CPF, @"\D", "");
 
-                var userAlreadyExists = boClient.VerificarExistencia(cpf, model.Id);
+                var usuarioJaExiste = boCliente.VerificarExistencia(cpf, model.Id);
 
-                if (userAlreadyExists)
+                if (usuarioJaExiste)
                 {
                     Response.StatusCode = 400;
                     return Json("O CPF informado já está vinculado a outro cliente.");
@@ -132,35 +132,35 @@ namespace WebAtividadeEntrevista.Controllers
                 {
                     var cpfs = new List<string>();
 
-                    foreach (var beneficiary in model.Beneficiarios)
+                    foreach (var beneficiario in model.Beneficiarios)
                     {
-                        string beneficiaryCpf = Regex.Replace(beneficiary.CPF, @"\D", "");
+                        string beneficiarioCpf = Regex.Replace(beneficiario.CPF, @"\D", "");
 
-                        if (cpfs.Contains(beneficiaryCpf))
+                        if (cpfs.Contains(beneficiarioCpf))
                         {
                             Response.StatusCode = 400;
                             return Json("Informe um CPF único para cada beneficiário.");
                         }
 
-                        cpfs.Add(beneficiaryCpf);
+                        cpfs.Add(beneficiarioCpf);
                     }
                 }
 
-                if (model.Beneficiarios == null) model.Beneficiarios = new List<BeneficiaryModel>();
+                if (model.Beneficiarios == null) model.Beneficiarios = new List<BeneficiarioModel>();
 
-                var beneficiaries = boBeneficiary.Consultar(model.Id);
+                var beneficiarios = boBeneficiario.Consultar(model.Id);
 
-                foreach (var beneficiary in beneficiaries)
+                foreach (var beneficiario in beneficiarios)
                 {
-                    bool stillInList = model.Beneficiarios.Any(b => b.Id == beneficiary.Id);
+                    bool aindaNaLista = model.Beneficiarios.Any(b => b.Id == beneficiario.Id);
 
-                    if (!stillInList)
+                    if (!aindaNaLista)
                     {
-                        boBeneficiary.Excluir(model.Id, beneficiary.Id);
+                        boBeneficiario.Excluir(model.Id, beneficiario.Id);
                     }
                 }
 
-                boClient.Alterar(new Cliente()
+                boCliente.Alterar(new Cliente()
                 {
                     Id = model.Id,
                     CEP = model.CEP,
@@ -175,26 +175,26 @@ namespace WebAtividadeEntrevista.Controllers
                     Telefone = model.Telefone
                 });
 
-                    foreach (var beneficiary in model.Beneficiarios)
+                    foreach (var beneficiario in model.Beneficiarios)
                     {
                         //Se ID > 0 Significa que é um beneficiário já existente, logo apenas atualizar
-                        if (beneficiary.Id > 0)
+                        if (beneficiario.Id > 0)
                         {
-                            boBeneficiary.Alterar(new Beneficiary()
+                        boBeneficiario.Alterar(new Beneficiario()
                             {
-                                Id = beneficiary.Id,
-                                Nome = beneficiary.Name,
-                                CPF = Regex.Replace(beneficiary.CPF, @"\D", ""),
+                                Id = beneficiario.Id,
+                                Nome = beneficiario.Nome,
+                                CPF = Regex.Replace(beneficiario.CPF, @"\D", ""),
                                 IdCliente = model.Id
                             });
                         }
                         //Se ID == 0 Significa que é um beneficiário que não existente, logo incluir
                         else
                         {
-                            boBeneficiary.Incluir(new Beneficiary
+                        boBeneficiario.Incluir(new Beneficiario
                             {
-                                CPF = Regex.Replace(beneficiary.CPF, @"\D", ""),
-                                Nome = beneficiary.Name,
+                                CPF = Regex.Replace(beneficiario.CPF, @"\D", ""),
+                                Nome = beneficiario.Nome,
                                 IdCliente = model.Id
                             });
                         }
@@ -206,17 +206,17 @@ namespace WebAtividadeEntrevista.Controllers
         [HttpGet]
         public ActionResult Alterar(long id)
         {
-            BoCliente boClient = new BoCliente();
-            BoBeneficiary boBeneficiary = new BoBeneficiary();
+            BoCliente boCliente = new BoCliente();
+            BoBeneficiario boBeneficiario = new BoBeneficiario();
 
-            Cliente cliente = boClient.Consultar(id);
-            List<Beneficiary> beneficiaries = boBeneficiary.Consultar(id);
+            Cliente cliente = boCliente.Consultar(id);
+            List<Beneficiario> beneficiarios = boBeneficiario.Consultar(id);
 
-            List<BeneficiaryModel> beneficiaryModels = beneficiaries.Select(b => new BeneficiaryModel
+            List<BeneficiarioModel> beneficiariosModel = beneficiarios.Select(b => new BeneficiarioModel
             {
                 Id = b.Id,
                 CPF = b.CPF,
-                Name = b.Nome
+                Nome = b.Nome
             }).ToList();
 
             Models.ClienteModel model = null;
@@ -236,7 +236,7 @@ namespace WebAtividadeEntrevista.Controllers
                     Nome = cliente.Nome,
                     Sobrenome = cliente.Sobrenome,
                     Telefone = cliente.Telefone,
-                    Beneficiarios = beneficiaryModels
+                    Beneficiarios = beneficiariosModel
                 };
             }
 
